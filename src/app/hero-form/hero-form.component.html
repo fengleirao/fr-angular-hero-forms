@@ -1,0 +1,81 @@
+<div [hidden]="submitted">
+    <h1>Hero Form</h1>
+    <form (ngSubmit)="onSubmit()" #heroForm="ngForm" >     
+        <!--{{ model | json }}  -->            <!--json 管道会把数据序列化为字符串-->
+        <!-- 为 <form> 标签添加模板引用变量 #heroForm，并把它的值设置如下 
+        模板变量 heroForm 现在是对 NgForm 指令实例的引用，该指令实例管理整个表单。    
+        -->
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" 
+                required 
+                [(ngModel)]="model.name" name="name" 
+                #name="ngModel"
+                />         
+                <!--在元素上使用 [(ngModel)] 时，必须为该元素定义一个 name 属性 
+                模板引用变量（#name）设置为 "ngModel"，因为 "ngModel" 是 NgModel.exportAs 属性的值。
+                这个属性告诉 Angular 如何把引用变量和指令链接起来。
+                -->
+
+            <!-- TODO: remove this: {{model.name}}  -->
+            <div [hidden]="name.valid || name.pristine"
+                class="alert alert-danger">
+                Name is required
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="alterEgo">Alter Ego</label>
+            <input type="text" class="form-control" id="alterEgo"
+                [(ngModel)]="model.alterEgo" name="alterEgo" />
+        </div>
+
+
+        <div class="form-group">
+            <label for="power">Hero Power</label>
+            <select class="form-control" id="power"
+                required 
+                [(ngModel)]="model.power" name="power" >
+
+                <option *ngFor="let pow of powers" [value]="pow">{{pow}}</option>
+            </select>
+        </div>    
+
+        <div class="form-groud">
+            <button type="submit" class="btn btn-success" [disabled]="!heroForm.valid">Submit</button>
+            <button type="button" class="btn btn-default" (click)="newHero(); heroForm.reset()" >New Hero</button>
+            
+        </div>
+    </form>
+</div>
+
+<div [hidden]="!submitted">
+    <h2>Your submitted the following:</h2>
+    <div class="row">
+        <div class="col-xs-3">Name</div>
+        <div class="col-xs-9">{{model.name}}</div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-3">Alter Ego</div>
+        <div class="col-xs-9">{{model.alterEgo}}</div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-3">Power</div>
+        <div class="col-xs-9">{{model.power}}</div>
+    </div>    
+    <br>
+    <button type="button" class="btn btn-primary"
+        (click)="submitted=false" >Edit</button>
+
+</div>
+
+
+
+<!-- 跟踪控件状态
+状态 为 TRUE 时的类名 为 FALSE 时的类名
+
+该控件已被访问过。ng-touched	ng-untouched
+控件的值已被更改。ng-dirty	ng-pristine
+控件的值是有效的。ng-valid	ng-invalid -->
